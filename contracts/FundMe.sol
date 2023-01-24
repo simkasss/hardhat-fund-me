@@ -47,15 +47,9 @@ contract FundMe {
 
     // 1ANS: This doesnt work (after I add this modifier, my tests fails)
     modifier fundOnce() {
-        for (
-            uint256 funderIndex = 0;
-            funderIndex < funders.length;
-            funderIndex++
-        ) {
-            if (funders[funderIndex] == msg.sender)
-                revert FundMe__AlreadyFunded();
-            _;
-        }
+        if (addressToAmountFunded[msg.sender] != 0)
+            revert FundMe__AlreadyFunded();
+        _;
     }
 
     function withdraw()
