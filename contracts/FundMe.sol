@@ -71,6 +71,8 @@ contract FundMe {
         ) {
             address funder = funders[funderIndex];
             addressToAmountFunded[funder] = 0; //3TODO: why is this necessary. How is this pattern called.
+            // 3ANS: This is Checks-Effects-Interactions pattern, it is used to avoid re-entrancy.
+            // First we have to change the values of Funded Amounts and just then we can call a transaction
         }
         funders = new address[](0);
         (bool callSuccess, ) = payable(msg.sender).call{
