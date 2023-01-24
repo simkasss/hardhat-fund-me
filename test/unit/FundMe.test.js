@@ -43,13 +43,13 @@ const { developmentChains } = require("../../helper-hardhat-config")
                   const funder = await fundMe.getFunder(0)
                   assert.equal(funder, deployer)
               })
-              //   it("Fails if you try to fund second time", async function () {
-              //       await fundMe.fund({ value: sendValue })
-              //       const secondT = await fundMe.fund({ value: sendValue })
-              //       await expect(secondT).to.be.revertedWith(
-              //           "FundMe__AlreadyFunded"
-              //       )
-              //   })
+              it("Fails if you try to fund second time", async function () {
+                  await fundMe.fund({ value: sendValue })
+                  const secondT = fundMe.fund({ value: sendValue })
+                  await expect(secondT).to.be.revertedWith(
+                      "FundMe__AlreadyFunded"
+                  )
+              })
           })
           describe("withdraw", function () {
               beforeEach(async function () {
@@ -149,10 +149,10 @@ const { developmentChains } = require("../../helper-hardhat-config")
               //           "FundMe__NotEnoughBalance"
               //       )
               //   })
-              it("only allows to withdraw when there is at least one funder with more than 1000 ETH", async function () {
-                  await expect(fundMe.withdraw()).to.be.revertedWith(
-                      "FundMe__NoOneWithMoreThan1k"
-                  )
-              })
+              //   it("only allows to withdraw when there is at least one funder with more than 1000 ETH", async function () {
+              //       await expect(fundMe.withdraw()).to.be.revertedWith(
+              //           "FundMe__NoOneWithMoreThan1k"
+              //       )
+              //   })
           })
       })

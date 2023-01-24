@@ -30,7 +30,7 @@ contract FundMe {
         priceFeed = AggregatorV3Interface(priceFeedAddress);
     }
 
-    function fund() public payable /*fundOnce*/ {
+    function fund() public payable fundOnce {
         require(
             msg.value.getConversionRate(priceFeed) >= MINIMUM_USD, //msg.value is in therms of WEI.
             // since we use library for uint256, when we call a function, we first write the specified variable for the library functions
@@ -46,23 +46,24 @@ contract FundMe {
     }
 
     // 1ANS: This doesnt work (after I add this modifier, my tests fails)
-    // modifier fundOnce() {
-    //     for (
-    //         uint256 funderIndex = 0;
-    //         funderIndex < funders.length;
-    //         funderIndex++
-    //     ) {
-    //         if (funders[funderIndex] == msg.sender)
-    //             revert FundMe__AlreadyFunded();
-    //         _;
-    //     }
-    // }
+    modifier fundOnce() {
+        for (
+            uint256 funderIndex = 0;
+            funderIndex < funders.length;
+            funderIndex++
+        ) {
+            if (funders[funderIndex] == msg.sender)
+                revert FundMe__AlreadyFunded();
+            _;
+        }
+    }
 
     function withdraw()
         public
         payable
-        /*onlyFirst  morethan10k*/
-        atLeastOneWithMoreThan1k
+    /*onlyFirst
+        morethan10k
+    atLeastOneWithMoreThan1k*/
     {
         for (
             uint256 funderIndex = 0;
