@@ -1,4 +1,3 @@
-const { LogDescription } = require("@ethersproject/abi")
 const { network } = require("hardhat")
 const {
     developmentChains,
