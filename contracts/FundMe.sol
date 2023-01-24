@@ -45,7 +45,7 @@ contract FundMe {
         funders.push(msg.sender); //1TODO: one address can only fund once. Throw an error when trying to fund for the second time
     }
 
-    // 1ANS: This doesnt work (after I add this modifier, my tests fails)
+    // 1ANS: This should work
     modifier fundOnce() {
         if (addressToAmountFunded[msg.sender] != 0)
             revert FundMe__AlreadyFunded();
