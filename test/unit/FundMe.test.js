@@ -43,19 +43,19 @@ const { developmentChains } = require("../../helper-hardhat-config")
                   const funder = await fundMe.getFunder(0)
                   assert.equal(funder, deployer)
               })
-              //   it("Fails if you try to fund second time", async function () {
-              //       await fundMe.fund({ value: sendValue })
-              //       const secondT = await fundMe.fund({ value: sendValue })
-              //       await expect(secondT).to.be.revertedWith(
-              //           "FundMe__AlreadyFunded"
-              //       )
-              //   })
+              it("Fails if you try to fund second time", async function () {
+                  await fundMe.fund({ value: sendValue })
+                  const secondT = fundMe.fund({ value: sendValue })
+                  await expect(secondT).to.be.revertedWith(
+                      "FundMe__AlreadyFunded"
+                  )
+              })
           })
           describe("withdraw", function () {
               beforeEach(async function () {
                   await fundMe.fund({ value: sendValue })
               })
-              it("withdraw eth from a single founder", async function () {
+              it("withdraw eth from a single funder", async function () {
                   const startingFundMeBalance =
                       await fundMe.provider.getBalance(fundMe.address)
                   const startingDeployerBalance =
@@ -120,39 +120,15 @@ const { developmentChains } = require("../../helper-hardhat-config")
                       )
                   }
               })
-              //   it("only allows the owner to withdraw", async function () {
-              //       const accounts = await ethers.getSigners()
-              //       const attacker = accounts[1]
-              //       const attackerConnectedContract = await fundMe.connect(
-              //           attacker
-              //       )
-              //       await expect(
-              //           attackerConnectedContract.withdraw()
-              //       ).to.be.revertedWith("FundMe__NotOwner")
-              //   })
-              //   it("only allows the first funder to withdraw", async function () {
-              //       const accounts = await ethers.getSigners()
-              //       for (let i = 1; i < 6; i++) {
-              //           const fundMeConnectedContract = await fundMe.connect(
-              //               accounts[i]
-              //           )
-              //           await fundMeConnectedContract.fund({ value: sendValue })
-              //       }
-              //       const funder2 = accounts[2]
-              //       const funder2ConnectedContract = await fundMe.connect(funder2)
-              //       await expect(
-              //           funder2ConnectedContract.withdraw()
-              //       ).to.be.revertedWith("FundMe__NotFirst")
-              //   })
-              //   it("only allows withdraw when there are more than 10000 funded", async function () {
-              //       await expect(fundMe.withdraw()).to.be.revertedWith(
-              //           "FundMe__NotEnoughBalance"
-              //       )
-              //   })
-              it("only allows to withdraw when there is at least one funder with more than 1000 ETH", async function () {
-                  await expect(fundMe.withdraw()).to.be.revertedWith(
-                      "FundMe__NoOneWithMoreThan1k"
+              it("only allows the owner to withdraw", async function () {
+                  const accounts = await ethers.getSigners()
+                  const attacker = accounts[1]
+                  const attackerConnectedContract = await fundMe.connect(
+                      attacker
                   )
+                  await expect(
+                      attackerConnectedContract.withdraw()
+                  ).to.be.revertedWith("FundMe__NotOwner")
               })
           })
       })
