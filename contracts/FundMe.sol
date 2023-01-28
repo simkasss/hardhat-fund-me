@@ -24,11 +24,11 @@ contract FundMe is PriceConverter {
         i_owner = msg.sender;
         priceFeed = AggregatorV3Interface(priceFeedAddress);
     }
-
     function fund() public payable {
         if (addressToAmountFunded[msg.sender] != 0) {
             revert FundMe__AlreadyFunded();
         }
+
         require(
             getConversionRate(msg.value, priceFeed) >= MINIMUM_USD,
             "You need to spend more ETH!"
