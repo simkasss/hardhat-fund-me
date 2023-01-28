@@ -10,9 +10,7 @@ error FundMe__NotFirst();
 error FundMe__NotEnoughBalance();
 error FundMe__NoOneWithMoreThan1k();
 
-contract FundMe {
-    using PriceConverter for uint256;
-
+contract FundMe is PriceConverter {
     mapping(address => uint256) private addressToAmountFunded;
     address[] private funders;
 
@@ -32,11 +30,11 @@ contract FundMe {
         }
 
         require(
-            msg.value.getConversionRate(priceFeed) >= MINIMUM_USD,
+            getConversionRate(msg.value, priceFeed) >= MINIMUM_USD,
             "You need to spend more ETH!"
         );
         require(
-            msg.value.getConversionRate(priceFeed) < MAXIMUM_USD,
+            getConversionRate(msg.value, priceFeed) < MAXIMUM_USD,
             "You need to spend less than 10 000 USD!"
         );
         addressToAmountFunded[msg.sender] += msg.value;
